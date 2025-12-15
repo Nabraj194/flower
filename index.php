@@ -239,6 +239,75 @@ session_start();
             padding:20px 0;
             margin-top:50px;
         }
+        .footer {
+  background-color: #111;
+  color: #fff;
+  padding: 40px 0 20px;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  width: 90%;
+  margin: auto;
+}
+
+/* .footer-box h3 {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #f5a623;
+}
+.footer-box new-foot{
+   
+    font-size: 16px;
+} */
+.footer-box h3 {
+  margin-bottom: 8px;   /* space below heading */
+}
+
+.new-foot {
+  margin-top: 5px;      /* keeps logo just below text */
+}
+
+.new-foot img {
+  display: block;       /* forces image to stay below */
+  max-width: 120px;     /* adjust size if needed */
+}
+
+.footer-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-box ul li {
+  margin-bottom: 8px;
+}
+
+.footer-box ul li a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+.footer-box ul li a:hover {
+  color: #f5a623;
+}
+
+.footer-box p {
+  color: #ccc;
+  margin: 5px 0;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  font-size: 14px;
+  color: #aaa;
+}
+
 
     </style>
 </head>
@@ -354,10 +423,51 @@ session_start();
     </section>
 
 
-    <!-- FOOTER -->
-    <div class="footer">
-        <p>© 2025 ArtNest | Handmade Products Marketplace</p>
+    <footer class="footer">
+  <div class="footer-container">
+
+    <!-- Social Media -->
+    <div class="footer-box">
+      <h3>SOCIAL MEDIA</h3>
+      <ul>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Tiktok</a></li>
+      </ul>
     </div>
+
+    <!-- Secure Payment -->
+    <div class="footer-box">
+      <h3>SECURE PAYMENT</h3>
+      <div class="new-foot">
+        <img src="es.png" alt="">
+    </div>
+    </div>
+
+    <!-- Contact Us -->
+    <div class="footer-box">
+      <h3>CONTACT US</h3>
+      <p>Whatsapp/Viber:</p>
+      <p><strong>9812345670</strong></p>
+    </div>
+
+    <!-- Information -->
+    <div class="footer-box">
+      <h3>INFORMATION</h3>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Terms and Conditions</a></li>
+        <li><a href="#">Refund and Return Policy</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Artnest. All Rights Reserved.</p>
+  </div>
+</footer>
+
 
 </body>
 </html>
