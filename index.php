@@ -8,7 +8,7 @@ $products = [
     'handmade' => [
         ['name'=>'Handmade Flower Basket','price'=>'850','img'=>'new (1).jpg'],
         ['name'=>'Woven Storage Basket','price'=>'950','img'=>'new (2).jpg'],
-        ['name'=>'Handmade Gift Box','price'=>'1200','img'=>'a.jpg'],
+        ['name'=>'Handmade Gift Box','price'=>'1200','img'=>'photo/my.webp'],
         ['name'=>'Decorative Handmade Tray','price'=>'700','img'=>'tray.jpg
         '],
     ],
@@ -22,13 +22,13 @@ $products = [
         ['name'=>'Clay Coffee Cup','price'=>'550','img'=>'cl.webp'],
         ['name'=>'Ceramic Vase','price'=>'1500','img'=>'pot.webp'],
         ['name'=>'Handmade Ceramic Plate','price'=>'700','img'=>'ivory.webp'],
-        ['name'=>'Decorative Ceramic Bowl','price'=>'1200','img'=>'b.jpg'],
+        ['name'=>'Decorative Ceramic Bowl','price'=>'1200','img'=>'photo/b.jpg'],
     ],
     'decor' => [
-        ['name'=>'Woolen Table Mat','price'=>'350','img'=>'a.jpg'],
-        ['name'=>'Wall Hanging','price'=>'900','img'=>'a.jpg'],
-        ['name'=>'Handmade Candle Holder','price'=>'600','img'=>'a.jpg'],
-        ['name'=>'Colorful Handmade Pot','price'=>'1200','img'=>'a.jpg'],
+        ['name'=>'Woolen Table Mat','price'=>'350','img'=>'img-.webp'],
+        ['name'=>'Wall Hanging','price'=>'900','img'=>'img2.jpg'],
+        ['name'=>'Handmade Candle Holder','price'=>'600','img'=>'img3.webp'],
+        ['name'=>'Colorful Handmade Pot','price'=>'1200','img'=>'color.webp'],
     ]
 ];
 ?>
@@ -176,7 +176,7 @@ body{background:#f5f5f5;}
             <h3>Ceramic & Cups</h3>
         </div></a>
         <a href="index.php?category=decor"><div class="cat-box">
-            <img src="land.jpg">
+            <img src="pro.webp">
             <h3>Decor Items</h3>
         </div></a>
     </div>
@@ -201,8 +201,7 @@ body{background:#f5f5f5;}
 <!-- CATEGORY PRODUCT LIST -->
 <section class="products">
     <h2>
-        <?php 
-            if($category=='handmade') echo "Handmade Baskets";
+        <?php             if($category=='handmade') echo "Handmade Baskets";
             elseif($category=='art') echo "Art & Paintings";
             elseif($category=='ceramic') echo "Ceramic & Cups";
             elseif($category=='decor') echo "Decor Items";
