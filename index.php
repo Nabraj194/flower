@@ -1,30 +1,52 @@
-<?php
+<?php 
 session_start();
-$page = isset($_GET['page']) ? $_GET['page'] : 'home';
-$category = isset($_GET['category']) ? $_GET['category'] : '';
 
-// Product arrays
+// ================== PAGE & CATEGORY ==================
+$page = $_GET['page'] ?? 'home';
+$category = $_GET['category'] ?? '';
+
+// ================== CART SESSION ==================
+if(!isset($_SESSION['cart'])){
+    $_SESSION['cart'] = [];
+}
+
+if(isset($_POST['add_to_cart'])){
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $price = $_POST['price'];
+
+    if(!isset($_SESSION['cart'][$id])){
+        $_SESSION['cart'][$id] = ['name'=>$name, 'price'=>$price, 'qty'=>1];
+    } else {
+        $_SESSION['cart'][$id]['qty']++;
+    }
+}
+
+if(isset($_GET['remove'])){
+    unset($_SESSION['cart'][$_GET['remove']]);
+}
+
+// ================== PRODUCTS ==================
 $products = [
-    'handmade' => [
+    'handmade'=>[
         ['name'=>'Handmade Flower Basket','price'=>'850','img'=>'new (1).jpg'],
         ['name'=>'Woven Storage Basket','price'=>'950','img'=>'new (2).jpg'],
         ['name'=>'Handmade Gift Box','price'=>'1200','img'=>'photo/my.webp'],
-        ['name'=>'Decorative Handmade Tray','price'=>'700','img'=>'tray.jpg
-        '],
+        ['name'=>'Decorative Handmade Tray','price'=>'700','img'=>'tray.jpg'],
     ],
-    'art' => [
+    'art'=>[
         ['name'=>'Oil Painting Landscape','price'=>'2500','img'=>'x.jpg'],
         ['name'=>'Abstract Wall Art','price'=>'1800','img'=>'acc.jpg'],
         ['name'=>'Canvas Painting Set','price'=>'3200','img'=>'canv.jpg'],
         ['name'=>'Mini Art Frames','price'=>'900','img'=>'images.jpg'],
     ],
-    'ceramic' => [
+    'ceramic'=>[
         ['name'=>'Clay Coffee Cup','price'=>'550','img'=>'cl.webp'],
         ['name'=>'Ceramic Vase','price'=>'1500','img'=>'pot.webp'],
         ['name'=>'Handmade Ceramic Plate','price'=>'700','img'=>'ivory.webp'],
         ['name'=>'Decorative Ceramic Bowl','price'=>'1200','img'=>'photo/b.jpg'],
     ],
-    'decor' => [
+    'decor'=>[
         ['name'=>'Woolen Table Mat','price'=>'350','img'=>'img-.webp'],
         ['name'=>'Wall Hanging','price'=>'900','img'=>'img2.jpg'],
         ['name'=>'Handmade Candle Holder','price'=>'600','img'=>'img3.webp'],
@@ -39,7 +61,6 @@ $products = [
 <meta charset="UTF-8">
 <title>ArtNest - Handmade Products</title>
 <style>
-/* ========== YOUR CSS (UNCHANGED) ========== */
 *{margin:0;padding:0;font-family:'Times New Roman', serif;}
 body{background:#f5f5f5;}
 .navbar{width:95%;background:#1ba8e9;padding:12px 0;display:flex;align-items:center;justify-content:space-between;border-radius:20px;box-shadow:0px 2px 8px rgba(0,0,0,0.2);margin:15px auto;}
@@ -71,54 +92,34 @@ body{background:#f5f5f5;}
 .product-card img{width:100%;height:200px;border-radius:15px;object-fit:cover;}
 .product-card h4{font-size:20px;margin-top:10px;}
 .product-card p{font-size:18px;color:green;margin-top:5px;}
+.product-card form{margin-top:10px;}
+button{background:#1ba8e9;color:#fff;border:none;padding:8px 20px;border-radius:20px;cursor:pointer;transition:0.3s;}
+button:hover{background:#0d81b2;}
 .about-box{max-width:900px;margin:60px auto;background:white;padding:40px;border-radius:20px;box-shadow:0 3px 10px rgba(0,0,0,0.2);}
 .about-box h1{text-align:center;margin-bottom:20px;}
 .about-box p{font-size:18px;line-height:1.8;color:#444;margin-bottom:15px;}
-.footer{width:100%;background:#111;color:white;text-align:center;padding:20px 0;margin-top:50px;}
-.footer {background-color:darkcyan;color:#fff;padding:40px 0 20px;font-family:Arial, sans-serif;}
+.footer{width:100%;background:darkcyan;color:white;text-align:center;padding:40px 0 20px;font-family:Arial, sans-serif;}
 .footer-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;width:90%;margin:auto;}
-.new,.facebook,.tiktok,.new-foot img{display:block;max-width:120px;margin-top:px;margin-left:20px;}
 .footer-box h3{margin-bottom:8px;}
 .footer-box ul{list-style:none;padding:0;}
-.footer-box ul li{margin-bottom:8px;}
+.footer-box ul li{margin-bottom:8px;display:flex;align-items:center;gap:10px;}
 .footer-box ul li a{color:#ccc;text-decoration:none;}
 .footer-box ul li a:hover{color:#f5a623;}
-.footer-box p{color:#ccc;margin:5px 0;}
-.footer-bottom{text-align:center;margin-top:30px;border-top:1px solid #050505ff;padding-top:15px;font-size:14px;color:#fcf8f8ff;}
-/* ================= FOOTER ALIGNMENT FIX ================= */
-/* No style changed – layout only */
-
-.footer-box ul li{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.footer-box ul li div{
-    margin:0 !important;
-}
-
-.footer-box ul li img{
-    width:20px;
-    height:20px;
-    object-fit:contain;
-}
+.footer-box ul li img{width:20px;height:20px;object-fit:contain;}
 
 /* Secure payment logo alignment */
 .new-foot img{
-    margin-left:0 !important;
+    width: 120px;      /* change this value smaller/bigger as you like */
+    height: auto;      /* keeps image proportion */
+    margin: 10px auto; /* centers it */
+    display: block;
 }
 
-/* Mobile responsive alignment */
+.footer-bottom{text-align:center;margin-top:30px;border-top:1px solid #050505ff;padding-top:15px;font-size:14px;color:#fcf8f8ff;}
 @media(max-width:600px){
-    .footer-container{
-        text-align:center;
-    }
-    .footer-box ul li{
-        justify-content:center;
-    }
+    .footer-container{text-align:center;}
+    .footer-box ul li{justify-content:center;}
 }
-
 </style>
 </head>
 <body>
@@ -134,6 +135,7 @@ body{background:#f5f5f5;}
         <li><a href="index.php?page=about">About</a></li>
         <li><a href="index.php">Category</a></li>
         <li><a href="index.php">Contact</a></li>
+        <li><a href="index.php?page=cart">Cart (<?php echo array_sum(array_column($_SESSION['cart'],'qty')); ?>)</a></li>
     </ul>
     <div class="btn-area">
         <?php if(isset($_SESSION['user_id'])){ ?>
@@ -147,10 +149,8 @@ body{background:#f5f5f5;}
 </div>
 
 <!-- ================= PAGE CONTENT ================= -->
-
 <?php if($page == 'home' && $category==''){ ?>
 
-<!-- HERO -->
 <div class="hero">
     <h1>Welcome to ArtNest</h1>
     <p>Handmade · Creative · Unique</p>
@@ -163,19 +163,19 @@ body{background:#f5f5f5;}
 <section class="categories">
     <h2>Shop by Category</h2>
     <div class="cat-container">
-        <a href="index.php?category=handmade"><div class="cat-box">
+        <a href="?category=handmade"><div class="cat-box">
             <img src="land.jpg">
             <h3>Handmade Baskets</h3>
         </div></a>
-        <a href="index.php?category=art"><div class="cat-box">
+        <a href="?category=art"><div class="cat-box">
             <img src="titel.jpg">
             <h3>Art & Paintings</h3>
         </div></a>
-        <a href="index.php?category=ceramic"><div class="cat-box">
+        <a href="?category=ceramic"><div class="cat-box">
             <img src="earth.webp">
             <h3>Ceramic & Cups</h3>
         </div></a>
-        <a href="index.php?category=decor"><div class="cat-box">
+        <a href="?category=decor"><div class="cat-box">
             <img src="pro.webp">
             <h3>Decor Items</h3>
         </div></a>
@@ -186,11 +186,17 @@ body{background:#f5f5f5;}
 <section class="products">
     <h2>Featured Products</h2>
     <div class="product-grid">
-        <?php foreach($products['handmade'] as $p){ ?>
+        <?php foreach($products['handmade'] as $i=>$p){ ?>
         <div class="product-card">
             <img src="<?php echo $p['img']; ?>">
             <h4><?php echo $p['name']; ?></h4>
             <p>Rs. <?php echo $p['price']; ?></p>
+            <form method="post">
+                <input type="hidden" name="id" value="handmade_<?php echo $i; ?>">
+                <input type="hidden" name="name" value="<?php echo $p['name']; ?>">
+                <input type="hidden" name="price" value="<?php echo $p['price']; ?>">
+                <button name="add_to_cart">Add to Cart</button>
+            </form>
         </div>
         <?php } ?>
     </div>
@@ -198,10 +204,10 @@ body{background:#f5f5f5;}
 
 <?php } elseif($category!=''){ ?>
 
-<!-- CATEGORY PRODUCT LIST -->
 <section class="products">
     <h2>
-        <?php             if($category=='handmade') echo "Handmade Baskets";
+        <?php
+            if($category=='handmade') echo "Handmade Baskets";
             elseif($category=='art') echo "Art & Paintings";
             elseif($category=='ceramic') echo "Ceramic & Cups";
             elseif($category=='decor') echo "Decor Items";
@@ -209,38 +215,43 @@ body{background:#f5f5f5;}
     </h2>
     <div class="product-grid">
         <?php 
-            if(isset($products[$category])){
-                foreach($products[$category] as $p){
-                    echo '<div class="product-card">';
-                    echo '<img src="'.$p['img'].'">';
-                    echo '<h4>'.$p['name'].'</h4>';
-                    echo '<p>Rs. '.$p['price'].'</p>';
-                    echo '</div>';
-                }
-            } else {
-                echo '<p>No products found in this category.</p>';
+            foreach($products[$category] as $i=>$p){
+                echo '<div class="product-card">';
+                echo '<img src="'.$p['img'].'">';
+                echo '<h4>'.$p['name'].'</h4>';
+                echo '<p>Rs. '.$p['price'].'</p>';
+                echo '<form method="post">';
+                echo '<input type="hidden" name="id" value="'.$category.'_'.$i.'">';
+                echo '<input type="hidden" name="name" value="'.$p['name'].'">';
+                echo '<input type="hidden" name="price" value="'.$p['price'].'">';
+                echo '<button name="add_to_cart">Add to Cart</button>';
+                echo '</form>';
+                echo '</div>';
             }
         ?>
     </div>
 </section>
 
+<?php } elseif($page=='cart'){ ?>
+
+<section class="products">
+    <h2>Your Cart</h2>
+    <?php
+    $total=0;
+    foreach($_SESSION['cart'] as $id=>$item){
+        $sub=$item['price']*$item['qty'];
+        $total+=$sub;
+        echo "<p>{$item['name']} × {$item['qty']} = Rs.$sub <a href='?page=cart&remove=$id'>Remove</a></p>";
+    }
+    echo "<h3>Total: Rs.$total</h3>";
+    ?>
+</section>
+
 <?php } elseif($page=='about'){ ?>
 
-<!-- ABOUT SECTION -->
 <div class="about-box">
     <h1>About ArtNest</h1>
-    <p>
-        ArtNest is a handmade product e-commerce website created to promote creativity,
-        culture, and local craftsmanship.
-    </p>
-    <p>
-        This platform is developed using PHP, HTML, CSS, and JavaScript as a practical
-        project with login system, product display, and category management.
-    </p>
-    <p>
-        Our goal is to connect local artists with customers through a secure
-        and user-friendly online marketplace.
-    </p>
+    <p>ArtNest is a handmade product e-commerce website promoting local creativity and craftsmanship.</p>
 </div>
 
 <?php } ?>
@@ -251,21 +262,10 @@ body{background:#f5f5f5;}
         <div class="footer-box">
             <h3>SOCIAL MEDIA</h3>
             <ul>
-                <li>
-    <img src="fb.jpg" width="20px" class="social-icon">
-    <a href="#">Facebook</a>
-</li>
-
-<li>
-    <img src="inst.webp" width="20px" class="social-icon">
-    <a href="#">Instagram</a>
-</li>
-
-<li>
-    <img src="R.jpg" width="20px" class="social-icon">
-    <a href="#">Tiktok</a>
-</li>
-
+                <li><img src="fb.jpg"><a href="#">Facebook</a></li>
+                <li><img src="inst.webp"><a href="#">Instagram</a></li>
+                <li><img src="R.jpg"><a href="#">Tiktok</a></li>
+            </ul>
         </div>
         <div class="footer-box">
             <h3>SECURE PAYMENT</h3>
@@ -275,8 +275,7 @@ body{background:#f5f5f5;}
             <h3>CONTACT US</h3>
             <p>artnest@gmail.com</p>
             <p>Nepalgunj, Banke</p>
-            <p>Whatsapp/Viber:</p>
-            <p><strong>9812345670</strong></p>
+            <p>Whatsapp/Viber: <strong>9812345670</strong></p>
         </div>
         <div class="footer-box">
             <h3>INFORMATION</h3>
@@ -288,7 +287,7 @@ body{background:#f5f5f5;}
         </div>
     </div>
     <div class="footer-bottom">
-        <p>© 2025 Artnest. All Rights Reserved.</p>
+        <p>© 2025 ArtNest. All Rights Reserved.</p>
     </div>
 </footer>
 

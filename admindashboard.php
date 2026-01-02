@@ -7,7 +7,6 @@ if(!isset($_SESSION['username'])){
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,8 +71,7 @@ if(!isset($_SESSION['username'])){
 
 <div class="container">
     <h2>Welcome, <?php echo $_SESSION['username']; ?>!</h2>
-
-    <div class="cards">
+ <div class="cards">
         <div class="card">
             <i class="fas fa-users fa-3x"></i>
             <h2>120</h2>
