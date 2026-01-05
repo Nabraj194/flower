@@ -53,6 +53,24 @@ $products = [
         ['name'=>'Colorful Handmade Pot','price'=>'1200','img'=>'color.webp'],
     ]
 ];
+$search = strtolower($_GET['search'] ?? '');
+$searchResults = [];
+
+if($search != ''){
+    foreach($products as $cat => $items){
+        foreach($items as $i => $p){
+            if(strpos(strtolower($p['name']), $search) !== false){
+                $searchResults[] = [
+                    'id' => $cat.'_'.$i,
+                    'name' => $p['name'],
+                    'price' => $p['price'],
+                    'img' => $p['img']
+                ];
+            }
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -60,6 +78,8 @@ $products = [
 <head>
 <meta charset="UTF-8">
 <title>ArtNest - Handmade Products</title>
+<a href="admindashboard.php">Admin</a>
+
 <style>
 *{margin:0;padding:0;font-family:'Times New Roman', serif;}
 body{background:#f5f5f5;}
@@ -150,12 +170,49 @@ button:hover{background:#0d81b2;}
 
 <!-- ================= PAGE CONTENT ================= -->
 <?php if($page == 'home' && $category==''){ ?>
+<?php if($search != ''){ ?>
 
+<!-- SEARCH RESULTS -->
+<section class="products">
+    <h2>Search Results for "<?php echo htmlspecialchars($search); ?>"</h2>
+
+    <div class="product-grid">
+        <?php if(count($searchResults) > 0){ ?>
+            <?php foreach($searchResults as $p){ ?>
+                <div class="product-card">
+                    <img src="<?php echo $p['img']; ?>">
+                    <h4><?php echo $p['name']; ?></h4>
+                    <p>Rs. <?php echo $p['price']; ?></p>
+                    <form method="post">
+                        <input type="hidden" name="id" value="<?php echo $p['id']; ?>">
+                        <input type="hidden" name="name" value="<?php echo $p['name']; ?>">
+                        <input type="hidden" name="price" value="<?php echo $p['price']; ?>">
+                        <button name="add_to_cart">Add to Cart</button>
+                    </form>
+                </div>
+            <?php } ?>
+        <?php } else { ?>
+            <p style="font-size:20px;color:red;">No products found.</p>
+        <?php } ?>
+    </div>
+</section>
+
+<?php } elseif($page == 'home' && $category==''){ ?>
+
+<!-- HOME CONTENT -->
 <div class="hero">
     <h1>Welcome to ArtNest</h1>
     <p>Handmade · Creative · Unique</p>
+
     <div class="search-box">
-        <input type="text" placeholder="Search your requirement...">
+        <form method="GET" style="width:100%; display:flex;">
+            <input 
+                type="text" 
+                name="search" 
+                placeholder="Search your requirement..." 
+                value="<?php echo $_GET['search'] ?? ''; ?>"
+            >
+        </form>
     </div>
 </div>
 
@@ -181,6 +238,10 @@ button:hover{background:#0d81b2;}
         </div></a>
     </div>
 </section>
+
+<?php } ?>
+
+
 
 <!-- FEATURED PRODUCTS -->
 <section class="products">
